@@ -51,9 +51,7 @@ public class SudokuBoard {
             for (int n = 1; n < 10; n++) {
                 this.solution[m - 1][n - 1] = solution.get(m, n);
                 game[m - 1][n - 1] = this.solution[m - 1][n - 1];
-                System.out.print(" " + this.solution[m - 1][n - 1]);
             }
-            System.out.println(" ");
         }
         
         GameStrategy gameStrategy;
