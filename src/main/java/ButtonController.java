@@ -4,16 +4,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class ButtonController extends JPanel {
@@ -21,12 +13,13 @@ public class ButtonController extends JPanel {
     private JButton btnCheck;
     private JButton btnHint;
     private JButton btnNew;
-    private JButton btnReset;
     private JRadioButton rBtnEasy;
     private JRadioButton rBtnHard;
     private JRadioButton rBtnNormal;
     private ButtonGroup btnGroup;
     private SudokuBoard sudokuBoard;
+    private JLabel labelTry;
+    private int wrongTries;
     private GridBagConstraints gbc;
 
     public ButtonController(SudokuBoard sudokuBoard) {
@@ -34,9 +27,9 @@ public class ButtonController extends JPanel {
         gbc = new GridBagConstraints();
 
         btnCheck = new JButton("Check");
-        btnHint = new JButton("Hint");
-        btnNew = new JButton("New");
-        btnReset = new JButton("Reset");
+        btnHint = new JButton("Rules");
+        btnNew = new JButton("New Game");
+        labelTry = new JLabel("Number of wrong tries : " + wrongTries + "/3");
         setRadioButtons();
     }
 
@@ -81,7 +74,12 @@ public class ButtonController extends JPanel {
                     }
                 }
                 if (!flag) {
-                    JOptionPane.showMessageDialog(null, "Yanlış çözdünüz..", "Wrong Solution", JOptionPane.ERROR_MESSAGE);
+                    wrongTries++;
+                    labelTry.setText("Number of wrong tries : " + wrongTries + "/3");
+                    if(wrongTries >= 3){
+                        JOptionPane.showMessageDialog(null, "Yanlış çözdünüz..", "Wrong Solution", JOptionPane.ERROR_MESSAGE);
+                        btnNew.doClick();
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Tebrikler, doğru çözdünüz..", "True Solution", JOptionPane.PLAIN_MESSAGE);
                 }
@@ -97,23 +95,11 @@ public class ButtonController extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean flag = false;
-                List<Integer> positions = new ArrayList();
-                for (int i = 0; i < 81; i++) {
-                    positions.add(i);
-                }
-                Collections.shuffle(positions);
-                while (flag == false && positions.size() > 0) {
-                    int position = positions.remove(0);
-
-                    int x = position / 9;
-                    int y = position % 9;
-
-                    if (sudokuBoard.getFields()[x][y].getText().equals("")) {
-                        sudokuBoard.getFields()[x][y].setText(String.valueOf(sudokuBoard.getSolution()[x][y]));
-                        flag = true;
-                    }
-                }
+                JOptionPane.showMessageDialog(null, "The Sudoku game involves a grid of 81 squares. " +
+                        "The grid is divided into nine blocks, each containing nine squares.\n" +
+                        "The rules of the game are simple: " +
+                        "each of the nine blocks has to contain all the numbers 1-9 within its squares. " +
+                        "Each number can only appear once in a row, column or box.", "Rules", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         add(btnHint, gbc);
@@ -143,27 +129,11 @@ public class ButtonController extends JPanel {
                         }
                     }
                 }
+                wrongTries = 0;
+                labelTry.setText("New game started!");
             }
         });
         add(btnNew, gbc);
-        gbc.gridy++;
-    }
-
-    private void resetButtonAction() {
-        btnReset.setFocusable(false);
-        btnReset.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i < 9; i++) {
-                    for (int j = 0; j < 9; j++) {
-                        sudokuBoard.getFields()[i][j].setText(sudokuBoard.getGame()[i][j] == 0 ? "" : String.valueOf(sudokuBoard.getGame()[i][j]));
-                        sudokuBoard.getFields()[i][j].setBackground(sudokuBoard.getGame()[i][j] == 0 ? Color.WHITE : sudokuBoard.getFields()[i][j].getBackground());
-                    }
-                }
-            }
-        });
-        add(btnReset, gbc);
         gbc.gridy++;
     }
 
@@ -186,15 +156,14 @@ public class ButtonController extends JPanel {
         gbc.gridy++;
         add(rBtnHard, gbc);
         gbc.gridy++;
-        
     }
 
     public ButtonController createController() {
         setMenu();
-        checkButtonAction();
-        hintButtonAction();
         newButtonAction();
-        resetButtonAction();
+        hintButtonAction();
+        checkButtonAction();
+        add(labelTry, gbc);
 
         return this;
     }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class HardGame implements GameStrategy {
 
-    private int[][] game;
+    private final int[][] game;
 
     public HardGame(int[][] game) {
         this.game = game;
@@ -17,7 +17,7 @@ public class HardGame implements GameStrategy {
 
     @Override
     public void generateGame() {
-        List<Integer> positions = new ArrayList();
+        List<Integer> positions = new ArrayList<>();
 
         for (int i = 0; i < 81; i++) {
             positions.add(i);
@@ -29,7 +29,7 @@ public class HardGame implements GameStrategy {
 
     private void generateGame(List<Integer> positions) {
         int count = 0;
-        while (positions.size() > 0 && count < 57 ) {
+        while (positions.size() > 0 && count < 61 ) {
             int position = positions.remove(0);
 
             int x = position / 9;
@@ -58,7 +58,7 @@ public class HardGame implements GameStrategy {
         int y = index % 9;
 
         if (game[x][y] == 0) {
-            List<Integer> numbers = new ArrayList();
+            List<Integer> numbers = new ArrayList<>();
             for (int i = 1; i <= 9; i++) {
                 numbers.add(i);
             }
@@ -76,9 +76,7 @@ public class HardGame implements GameStrategy {
                 }
                 game[x][y] = 0;
             }
-        } else if (!isValid(index + 1, numberOfSolutions)) {
-            return false;
-        }
+        } else return isValid(index + 1, numberOfSolutions);
 
         return true;
     }
@@ -128,6 +126,7 @@ public class HardGame implements GameStrategy {
 
     private int[] getLocation(int x, int y) {
         int[] locationPoints = new int[2];
+
         if (x == 0 || x == 1 || x == 2) {
             locationPoints[0] = 0;
         } else if (x == 3 || x == 4 || x == 5) {

@@ -28,7 +28,6 @@ public class SudokuBoard {
         game = new int[9][9];
         solution = new int[9][9];
         buttonController = new ButtonController(this);
-
     }
 
     public JTextField[][] getFields() {
@@ -87,7 +86,7 @@ public class SudokuBoard {
                 } catch (IllegalAccessException ex) {
                 } catch (UnsupportedLookAndFeelException ex) {
                 }
-                frame = new JFrame("Sudoku ver 0.7");
+                frame = new JFrame("Sudoku Guru");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setLayout(new BorderLayout());
                 frame.add(new SubBoard());
@@ -99,9 +98,8 @@ public class SudokuBoard {
     }
 
     public class SubBoard extends JPanel {
-
         public SubBoard() {
-            setLayout(new GridLayout(3, 3, 2, 2)); //çerçeve
+            setLayout(new GridLayout(3, 3, 2, 2));
             setBorder(new CompoundBorder(new LineBorder(Color.GRAY, 3), new EmptyBorder(4, 4, 4, 4)));
 
             Font font1 = new Font("SansSerif", Font.BOLD, 20);
@@ -113,7 +111,7 @@ public class SudokuBoard {
                     fields[row][col].setFont(font1);
                     fields[row][col].setHorizontalAlignment(JTextField.CENTER);
                     fields[row][col].setText(String.valueOf(game[row][col]).equals(String.valueOf(0)) ? "" : String.valueOf(game[row][col]));
-                    fields[row][col].setEditable(String.valueOf(game[row][col]).equals(String.valueOf(0)) ? true : false);
+                    fields[row][col].setEditable(String.valueOf(game[row][col]).equals(String.valueOf(0)));
                     fields[row][col].setBackground(game[row][col] == 0 ? Color.WHITE : new Color(-986896));
 
                     AbstractDocument d = (AbstractDocument) fields[row][col].getDocument();

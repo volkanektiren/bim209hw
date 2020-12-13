@@ -4,7 +4,7 @@ import java.util.List;
 
 public class NormalGame implements GameStrategy{
 
-    private int [][] game;
+    private final int [][] game;
 
     public NormalGame(int[][] solution)
     {
@@ -20,7 +20,7 @@ public class NormalGame implements GameStrategy{
     @Override
     public void generateGame()
     {
-        List<Integer> positions = new ArrayList();
+        List<Integer> positions = new ArrayList<>();
         for (int i = 0; i < 81; i++)
             positions.add(i);
 
@@ -31,7 +31,7 @@ public class NormalGame implements GameStrategy{
     private void generateGame(List<Integer> positions)
     {
         int count = 0;
-        while (positions.size() > 0 && count < 53 ) {
+        while (positions.size() > 0 && count < 55 ) {
             int position = positions.remove(0);
 
             int x = position / 9;
@@ -61,7 +61,7 @@ public class NormalGame implements GameStrategy{
 
         if (game[x][y] == 0)
         {
-            List<Integer> numbers = new ArrayList();
+            List<Integer> numbers = new ArrayList<>();
             for (int i = 1; i <= 9; i++)
                 numbers.add(i);
 
@@ -78,8 +78,7 @@ public class NormalGame implements GameStrategy{
                 }
                 game[x][y] = 0;
             }
-        } else if (!isValid(index + 1, numberOfSolutions))
-            return false;
+        } else return isValid(index + 1, numberOfSolutions);
 
         return true;
     }
